@@ -363,6 +363,9 @@ class SimpleReflection
             if (is_null($type) && version_compare(phpversion(), '5.1.0', '>=') && $parameter->isArray()) {
                 $signature .= 'array ';
             } elseif (!is_null($type)) {
+                if ($parameter->allowsNull()) {
+                    $signature .= '?';
+                }
                 $signature .= $type->getName() . ' ';
             }
             if ($parameter->isPassedByReference()) {

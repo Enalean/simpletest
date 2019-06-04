@@ -80,6 +80,10 @@ class AnyOldTypeHintedClass implements AnyOldArgumentInterface
     public function aMethod(AnyOldInterface $argument)
     {
     }
+
+    public function aMethodWithNullableType(?AnyOldInterface $argument)
+    {
+    }
 }
 
 class AnyDescendentImplementation implements AnyDescendentInterface
@@ -180,7 +184,7 @@ class TestOfReflection extends UnitTestCase
         $reflection = new SimpleReflection('AnyDescendentInterface');
         $this->assertIdentical($reflection->getMethods(), array('aMethod'));
     }
-    
+
     public function testCanSeparateInterfaceMethodsFromOthers()
     {
         $reflection = new SimpleReflection('AnyOldImplementation');
@@ -235,8 +239,15 @@ class TestOfReflection extends UnitTestCase
     public function testParameterCreationForTypeHinting()
     {
         $reflection = new SimpleReflection('AnyOldTypeHintedClass');
-        $function = $reflection->getSignature('aMethod');
-        $this->assertEqual('function aMethod(AnyOldInterface $argument)', $function);
+        $this->assertEqual(
+            'function aMethod(AnyOldInterface $argument)',
+            $reflection->getSignature('aMethod')
+        );
+        $this->assertEqual(
+            'function aMethodWithNullableType(?AnyOldInterface $argument)',
+            $reflection->getSignature('aMethodWithNullableType')
+        );
+        //$this->assertEqual('function aMethodWithNullableType(?AnyOldInterface $argument)', $function);
     }
 
     public function testIssetFunctionSignature()
@@ -245,7 +256,7 @@ class TestOfReflection extends UnitTestCase
         $function = $reflection->getSignature('__isset');
         $this->assertEqual('function __isset($key)', $function);
     }
-    
+
     public function testUnsetFunctionSignature()
     {
         $reflection = new SimpleReflection('AnyOldOverloadedClass');
@@ -260,13 +271,13 @@ class TestOfReflection extends UnitTestCase
         $this->assertEqual(1, count($interfaces));
         $this->assertEqual('AnyDescendentInterface', array_shift($interfaces));
     }
-    
+
     public function testCreatingSignatureForAbstractMethod()
     {
         $reflection = new SimpleReflection('AnotherOldAbstractClass');
         $this->assertEqual($reflection->getSignature('aMethod'), 'function aMethod(AnyOldInterface $argument)');
     }
-    
+
     public function testCanProperlyGenerateStaticMethodSignatures()
     {
         $reflection = new SimpleReflection('AnyOldClassWithStaticMethods');
