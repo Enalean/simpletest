@@ -343,7 +343,7 @@ class SimpleReflection
         $static = $method->isStatic() ? 'static ' : '';
         return "{$static}function $reference$name(" .
                 implode(', ', $this->getParameterSignatures($method)) .
-                ")";
+                ")" . $this->getReturnType($method);
     }
 
     /**
@@ -378,6 +378,25 @@ class SimpleReflection
             $signatures[] = $signature;
         }
         return $signatures;
+    }
+
+    protected function getReturnType(ReflectionMethod $method)
+    {
+        $reflected_return_type = $method->getReturnType();
+        if ($reflected_return_type === null) {
+            return '';
+        }
+
+        $return_type = $reflected_return_type->getName();
+        if('self' === $return_type) {
+            $return_type = "\\".$method->getDeclaringClass()->getName();
+        }
+
+        if ($reflected_return_type->allowsNull()) {
+            $return_type = "?$return_type";
+        }
+
+        return ": $return_type";
     }
 
     /**

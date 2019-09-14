@@ -24,6 +24,39 @@ class AnyOldLeafClassWithAFinal
     }
 }
 
+class AnyClassWithReturnTypes
+{
+    public function scalarReturnType() : int
+    {
+        return 0;
+    }
+
+    public function returnType() : stdClass
+    {
+        return new stdClass();
+    }
+
+    public function selfReturnType() : self
+    {
+        return new self();
+    }
+
+    public function nullableScalarReturnType() : ?int
+    {
+        return 0;
+    }
+
+    public function nullableReturnType() : ?stdClass
+    {
+        return new stdClass();
+    }
+
+    public function nullableSelfReturnType() : ?self
+    {
+        return new self();
+    }
+}
+
 interface AnyOldInterface
 {
     public function aMethod();
@@ -286,6 +319,17 @@ class TestOfReflection extends UnitTestCase
             'static function aStaticWithParameters($arg1, $arg2)',
             $reflection->getSignature('aStaticWithParameters')
         );
+    }
+
+    public function testCreationSignatureForMethodsWithReturnType()
+    {
+        $reflection = new SimpleReflection(AnyClassWithReturnTypes::class);
+        $this->assertEqual('function scalarReturnType(): int', $reflection->getSignature('scalarReturnType'));
+        $this->assertEqual('function returnType(): stdClass', $reflection->getSignature('returnType'));
+        $this->assertEqual('function selfReturnType(): \AnyClassWithReturnTypes', $reflection->getSignature('selfReturnType'));
+        $this->assertEqual('function nullableScalarReturnType(): ?int', $reflection->getSignature('nullableScalarReturnType'));
+        $this->assertEqual('function nullableReturnType(): ?stdClass', $reflection->getSignature('nullableReturnType'));
+        $this->assertEqual('function nullableSelfReturnType(): ?\AnyClassWithReturnTypes', $reflection->getSignature('nullableSelfReturnType'));
     }
 }
 
