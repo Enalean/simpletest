@@ -8,7 +8,7 @@
 /**#@+
  * include SimpleTest files
  */
-require_once(dirname(__FILE__) . '/reflection_php5.php');
+require_once(dirname(__FILE__) . '/reflection.php');
 require_once(dirname(__FILE__) . '/default_reporter.php');
 require_once(dirname(__FILE__) . '/compatibility.php');
 /**#@-*/
