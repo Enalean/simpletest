@@ -41,7 +41,11 @@ class SimpleErrorTrappingInvoker extends SimpleInvokerDecorator
     {
         $queue = $this->createErrorQueue();
         set_error_handler('SimpleTestErrorHandler');
-        parent::invoke($method);
+        try {
+            parent::invoke($method);
+        } catch (ArgumentCountError $error) {
+            SimpleTestErrorHandler(E_ERROR, $error->getMessage(), $error->getFile(), $error->getLine());
+        }
         restore_error_handler();
         $queue->tally();
     }

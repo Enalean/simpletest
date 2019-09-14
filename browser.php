@@ -1139,7 +1139,7 @@ class SimpleBrowser
     public function getLink($label, $index = 0)
     {
         $urls = $this->page->getUrlsByLabel($label);
-        if (count($urls) == 0) {
+        if (! is_countable($urls) || count($urls) == 0) {
             return false;
         }
         if (count($urls) < $index + 1) {

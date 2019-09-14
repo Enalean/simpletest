@@ -43,7 +43,7 @@ class TestOfAdditionalHeaders extends UnitTestCase
     public function testAdditionalHeaderAddedToRequest()
     {
         $response = new MockSimpleHttpResponse();
-        $response->setReturnReference('getHeaders', new MockSimpleHttpHeaders());
+        $response->setReturnValue('getHeaders', new MockSimpleHttpHeaders());
         
         $request = new MockSimpleHttpRequest();
         $request->setReturnReference('fetch', $response);
@@ -66,7 +66,7 @@ class TestOfBrowserCookies extends UnitTestCase
         $response = new MockSimpleHttpResponse();
         $response->setReturnValue("isError", false);
         $response->setReturnValue("getContent", "stuff");
-        $response->setReturnReference("getHeaders", new MockSimpleHttpHeaders());
+        $response->setReturnValue("getHeaders", new MockSimpleHttpHeaders());
         return $response;
     }
     
@@ -338,7 +338,7 @@ class TestOfBadHosts extends UnitTestCase
     {
         $request = $this->createSimulatedBadHost();
         $agent = new MockRequestUserAgent();
-        $agent->setReturnReference('createHttpRequest', $request);
+        $agent->setReturnValue('createHttpRequest', $request);
         $agent->__construct();
         $response = $agent->fetchResponse(
                 new SimpleUrl('http://this.host/this/path/page.html'),
@@ -352,7 +352,7 @@ class TestOfAuthorisation extends UnitTestCase
     public function testAuthenticateHeaderAdded()
     {
         $response = new MockSimpleHttpResponse();
-        $response->setReturnReference('getHeaders', new MockSimpleHttpHeaders());
+        $response->setReturnValue('getHeaders', new MockSimpleHttpHeaders());
         
         $request = new MockSimpleHttpRequest();
         $request->returns('fetch', $response);

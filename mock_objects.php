@@ -509,7 +509,8 @@ class SimpleCallSchedule
         if ($args === false) {
             return false;
         }
-        for ($i = 0; $i < count($args); $i++) {
+        $count = is_countable($args) ? count($args) : 0;
+        for ($i = 0; $i < $count; $i++) {
             if ($args[$i] === $this->wildcard) {
                 $args[$i] = new AnythingExpectation();
             }
@@ -771,7 +772,8 @@ class SimpleMock
         if ($args === false) {
             return false;
         }
-        for ($i = 0; $i < count($args); $i++) {
+        $count = is_countable($args) ? count($args) : 0;
+        for ($i = 0; $i < $count; $i++) {
             if ($args[$i] === $this->wildcard) {
                 $args[$i] = new AnythingExpectation();
             }
