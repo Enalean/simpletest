@@ -800,7 +800,11 @@ class IsAExpectation extends SimpleExpectation
     public function __construct($type, $message = '%s')
     {
         parent::__construct($message);
-        $this->type = $type;
+        if ($type === 'real') {
+            $this->type = 'float';
+        } else {
+            $this->type = $type;
+        }
     }
 
     /**
